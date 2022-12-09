@@ -1,10 +1,10 @@
-<script lang="ts" src="@/App.ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
-  <div class="wrapper">
-    <h1>Counter: {{ counter }}</h1>
-    <button @click="counter++">+1</button>
-  </div>
+  <div>
+    <h1>App</h1>  
+  </div>  
 </template>
 
 <style scoped>
