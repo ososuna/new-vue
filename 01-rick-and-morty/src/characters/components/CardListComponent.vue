@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import breakingBadApi from '@/api/breakingBadApi';
+import rickAndMortyApi from '@/api/rickAndMortyApi';
 
-breakingBadApi.get('/characters')
+rickAndMortyApi.get('/character')
   .then( resp => {
-    console.log({ data: resp.data[0].name });
+    console.log( resp.data.results[0] );
   });
 
 </script>

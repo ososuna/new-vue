@@ -8,7 +8,7 @@ import NavBarComponent from '@/shared/components/NavBarComponent.vue';
   <div class="wrapper">
     <header>
     <NavBarComponent
-      title="Breaking Bad"
+      title="Rick and Morty"
       :links="routeLinks"
     />
     </header>
