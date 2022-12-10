@@ -18,7 +18,6 @@ const routeLinks: RouterLink[] = characterRoute.children!
 
 <template>
   <h1>Character Layout</h1>
-  <!-- Navbar -->
   <NavBarComponent
     :show-icon="false"
     :links="routeLinks"
