@@ -12,19 +12,19 @@ const characterRoute: RouteRecordRaw = {
     {
       path: 'by/id',
       name: 'character-id',
-      props: { title: 'Character By ID' },
+      props: { title: 'Character By ID', visible: false },
       component: CharacterIdPage
     },
     {
       path: 'list',
       name: 'character-list',
-      props: { title: 'List' },
+      props: { title: 'List', visible: true },
       component: CharacterListPageVue
     },
     {
       path: 'search',
       name: 'character-search',
-      props: { title: 'Search' },
+      props: { title: 'Search', visible: true },
       component: CharacterSearchPage
     }
   ]
