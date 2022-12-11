@@ -7,15 +7,20 @@ import characterStore from '@/store/characters.store';
 
 const props = defineProps<{ title: string, visible: boolean }>();
 
-// const getCharacters = async() => {
-//   const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
-//   return data.results;
-// };
+const getCharacters = async() => {
+  const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
+  return data.results;
+};
 
-// const { isLoading, data: characters } = useQuery(
-//   ['characters'],
-//   getCharacters
-// );
+const { isLoading, data } = useQuery(
+  ['characters'],
+  getCharacters,
+  {
+    onSuccess( data ) {
+      characterStore.loadedCharacters( data );
+    }
+  }
+);
 
 
 </script>

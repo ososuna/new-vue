@@ -26,7 +26,13 @@ const characterStore = reactive<Store>({
     console.log('startLoadingCharacters');
   },
   loadedCharacters( data: Character[] ) {
-
+    this.characters = {
+      count: data.length,
+      errorMessage: null,
+      hasError: false,
+      isLoading: false,
+      list: data
+    }
   },
   loadCharactersFailed( error: string ) {
   }
