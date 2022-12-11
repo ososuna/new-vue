@@ -13,12 +13,21 @@ import type { Character, CharacterResponse } from '@/characters/interfaces/chara
 
 // 3. TanStack Query
 const getCharactersSlow = async():Promise<Character[]> => {
-  const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
-  return data.results;
+  return new Promise( (resolve) => {
+    setTimeout( async() => {
+      const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
+      resolve( data.results );
+    }, 2000);
+  });
+  
 }
 const { isLoading, isError, data: characters, error } = useQuery(
   ['characters'],
   getCharactersSlow,
+  {
+    cacheTime: 1000 * 60,
+    refetchOnReconnect: 'always'
+  }
 );
 
 </script>
