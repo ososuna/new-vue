@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import rickAndMortyApi from '@/api/rickAndMortyApi';
-import type { CharacterResponse, Character } from '@/characters/interfaces/character';
-
-const characters = ref<Character[]>([]);
-
-rickAndMortyApi.get<CharacterResponse>('/character')
-  .then(({ data }) => {
-    characters.value = data.results;
-  });
-
+import { useCharacters } from '@/characters/composables/useCharacters';
+const { isLoading, characters } = useCharacters();
 </script>
 
 <template>
+  <h3 v-if="isLoading">Loading...</h3>
+  <!-- <h3>Error</h3> -->
   <ul>
     <li
       v-for="{ id, name } of characters"
