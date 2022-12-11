@@ -22,7 +22,7 @@ const getCharactersSlow = async():Promise<Character[]> => {
   });
   
 }
-const { isLoading, isError, data: characters, error } = useQuery(
+const { isLoading, data: characters } = useQuery(
   ['characters'],
   getCharactersSlow,
   {
