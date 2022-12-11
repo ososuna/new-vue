@@ -1,5 +1,6 @@
-import { reactive } from "vue";
-import type { Character } from "@/characters/interfaces/character";
+import { reactive } from 'vue';
+import type { Character, CharacterResponse } from '@/characters/interfaces/character';
+import rickAndMortyApi from '@/api/rickAndMortyApi';
 
 interface Store {
   characters: {
@@ -22,8 +23,9 @@ const characterStore = reactive<Store>({
     isLoading: true,
     list: []
   },
-  startLoadingCharacters() {
-    console.log('startLoadingCharacters');
+  async startLoadingCharacters() {
+    const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
+    this.loadedCharacters( data.results );
   },
   loadedCharacters( data: Character[] ) {
     this.characters = {

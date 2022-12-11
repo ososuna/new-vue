@@ -7,14 +7,18 @@ import characterStore from '@/store/characters.store';
 
 const props = defineProps<{ title: string, visible: boolean }>();
 
-const getCharacters = async() => {
+const getCharactersCacheFirst = async() => {
+  if (characterStore.characters.count > 0 ) {
+    return characterStore.characters.list;
+  }
   const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
   return data.results;
 };
 
-const { isLoading, data } = useQuery(
+
+useQuery(
   ['characters'],
-  getCharacters,
+  getCharactersCacheFirst,
   {
     onSuccess( data ) {
       characterStore.loadedCharacters( data );
