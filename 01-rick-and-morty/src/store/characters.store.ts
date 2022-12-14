@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+import axios from 'axios';
 import type { Character, CharacterResponse } from '@/characters/interfaces/character';
 import rickAndMortyApi from '@/api/rickAndMortyApi';
 
@@ -24,8 +25,14 @@ const characterStore = reactive<Store>({
     list: []
   },
   async startLoadingCharacters() {
-    const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
-    this.loadedCharacters( data.results );
+    try {
+      const { data } = await rickAndMortyApi.get<CharacterResponse>('/character');
+      this.loadedCharacters( data.results );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        this.loadCharactersFailed( error.message );
+      }
+    }
   },
   loadedCharacters( data: Character[] ) {
     this.characters = {
@@ -37,6 +44,13 @@ const characterStore = reactive<Store>({
     }
   },
   loadCharactersFailed( error: string ) {
+    this.characters = {
+      count: 0,
+      errorMessage: error,
+      hasError: true,
+      isLoading: false,
+      list: []
+    }
   }
 });
 

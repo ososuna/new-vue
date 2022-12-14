@@ -22,8 +22,10 @@ useQuery(
   {
     onSuccess( data ) {
       characterStore.loadedCharacters( data );
-    }
-  }
+    },
+    // onError( error ) {
+    // }
+  },
 );
 
 
@@ -32,6 +34,10 @@ useQuery(
 <template>
   <div>
     <p v-if="characterStore.characters.isLoading">Loading...</p>
+    <div v-else-if="characterStore.characters.hasError">
+      <h2>Error at loading</h2>
+      <p>{{ characterStore.characters.errorMessage }}</p>
+    </div>
     <template v-else>
       <h2>{{ props.title }}</h2>
       <CardListComponent :characters="characterStore.characters.list" />
