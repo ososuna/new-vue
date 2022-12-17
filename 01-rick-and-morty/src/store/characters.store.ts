@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import axios from 'axios';
-import type { Character, CharacterResponse } from '@/characters/interfaces/character';
 import rickAndMortyApi from '@/api/rickAndMortyApi';
+import type { Character, CharacterResponse } from '@/characters/interfaces/character';
 
 interface Store {
   characters: {
@@ -11,9 +11,22 @@ interface Store {
     hasError: boolean,
     errorMessage: string | null
   },
+  ids: {
+    list: {
+      [id: string]: Character;
+    },
+    isLoading: boolean,
+    hasError: boolean,
+    errorMessage: string | null
+  },
+  // Characters methods
   startLoadingCharacters: () => void;
   loadedCharacters: ( data: Character[] ) => void;
   loadCharactersFailed: ( error: string ) => void;
+  // Characters by IDs methods
+  startLoadingCharactersByIds: ( ids: string[] ) => void;
+  checkIdInStore: ( id: string ) => boolean;
+  loadedCharacterById: ( character: Character ) => void;
 }
 
 const characterStore = reactive<Store>({
@@ -23,6 +36,12 @@ const characterStore = reactive<Store>({
     hasError: false,
     isLoading: true,
     list: []
+  },
+  ids: {
+    list: {},
+    isLoading: false,
+    hasError: false,
+    errorMessage: null
   },
   async startLoadingCharacters() {
     try {
@@ -51,6 +70,21 @@ const characterStore = reactive<Store>({
       isLoading: false,
       list: []
     }
+  },
+  async startLoadingCharactersByIds( ids: string[] ) {
+    this.ids = {
+      ...this.ids,
+      isLoading: true,
+      hasError: false,
+      errorMessage: null
+    }
+  },
+  checkIdInStore( id: string ) {
+    return !!this.ids.list[id];
+  },
+  loadedCharacterById( character: Character ) {
+    this.ids.isLoading = false;
+    this.ids.list[character.id] = character;
   }
 });
 
