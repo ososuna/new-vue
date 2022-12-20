@@ -1,18 +1,26 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import useCharacter from '@/characters/composables/useCharacter';
 
 const route = useRoute();
+const router = useRouter();
 const { id } = route.params as { id: string };
 
-const { character, errorMessage, hasError } = useCharacter( id );
+const { character, errorMessage, hasError, isLoading } = useCharacter( id );
+
+watch( isLoading, () => {
+  if (!isLoading.value && hasError.value) {
+    router.replace('/characters');
+  }
+});
 
 </script>
 
 <template>
-  <h3 v-if="!character">Loading...</h3>
+  <h3 v-if="isLoading">Loading...</h3>
   <h3 v-else-if="hasError">{{ errorMessage }}</h3>
-  <div v-else>
+  <div v-else-if="character">
     <h1>{{ character.name }}</h1>
     <div class="character-container">
       <img :src="character.image" :alt="character.name">
