@@ -1,35 +1,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { useQuery } from '@tanstack/vue-query';
-import rickAndMortyApi from '@/api/rickAndMortyApi';
-import type { Character } from '@/characters/interfaces/character';
-import characterStore from '@/store/characters.store';
+import useCharacter from '@/characters/composables/useCharacter';
 
 const route = useRoute();
 const { id } = route.params as { id: string };
 
-const getCharacterCacheFirst = async( characterId: string ): Promise<Character> => {
-  if (characterStore.checkIdInStore( characterId )) {
-    return characterStore.ids.list[characterId];
-  }
-  const { data } = await rickAndMortyApi.get<Character>(`/character/${characterId}`);
-  return data;
-}
-
-const { data: character } = useQuery(
-  ['character', id],
-  () => getCharacterCacheFirst(id),
-  {
-    onSuccess: ( character ) => {
-      characterStore.loadedCharacterById( character );
-    }
-  }
-)
+const { character, errorMessage, hasError } = useCharacter( id );
 
 </script>
 
 <template>
   <h3 v-if="!character">Loading...</h3>
+  <h3 v-else-if="hasError">{{ errorMessage }}</h3>
   <div v-else>
     <h1>{{ character.name }}</h1>
     <div class="character-container">
