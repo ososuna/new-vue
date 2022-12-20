@@ -15,7 +15,6 @@ const getCharactersCacheFirst = async() => {
   return data.results;
 };
 
-
 useQuery(
   ['characters'],
   getCharactersCacheFirst,
@@ -27,7 +26,6 @@ useQuery(
     // }
   },
 );
-
 
 </script>
 
