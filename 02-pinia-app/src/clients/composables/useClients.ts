@@ -1,9 +1,9 @@
+import { watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useQuery } from '@tanstack/vue-query';
 import clientsApi from '@/api/clientsApi';
 import type { Client } from '@/clients/interfaces/client';
 import { useClientsStore } from '@/store/clients';
-import { watch } from 'vue';
 
 const getClients = async(): Promise<Client[]> => {
   const { data } = await clientsApi.get<Client[]>('?_page=1');
@@ -26,8 +26,10 @@ const useClients = () => {
 
   return {
     // Properties
+    clients,
+    currentPage,
     isLoading,
-    clients
+    totalPages
   }
 
 }

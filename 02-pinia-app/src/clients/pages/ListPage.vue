@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import ClientListComponent from '../components/ClientListComponent.vue';
+import ClientListComponent from '@/clients/components/ClientListComponent.vue';
+import PaginationNumbersComponent from '@/clients/components/PaginationNumbersComponent.vue';
 
 </script>
 
@@ -8,10 +9,6 @@ import ClientListComponent from '../components/ClientListComponent.vue';
 <!-- Client List -->
 <ClientListComponent />
 <!-- Pagination numbers -->
+<PaginationNumbersComponent />
 <!-- Loading modal -->
 </template>
-
-
-<style scoped>
-
-</style>
