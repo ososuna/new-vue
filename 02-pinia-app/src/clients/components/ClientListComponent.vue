@@ -5,9 +5,15 @@ const { clients, isLoading } = useClients();
 
 <template>
   <ul>
-    <li>
-      <RouterLink :to="{name: 'client-id', params: { id: 1 }}">
-        Client 1
+    <li
+      v-for="client of clients"
+      :key="client.id"
+    >
+      <RouterLink :to="{
+        name: 'client-id',
+        params: { id: 1 }
+      }">
+        {{ client.name }}
       </RouterLink>
     </li>
   </ul>
