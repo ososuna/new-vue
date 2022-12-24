@@ -7,10 +7,11 @@ import PiniaIcon from '@/shared/components/icons/PiniaIcon.vue';
   <header>
     <PiniaIcon />
     <div class="wrapper">
-      <h3>The Pinia App</h3>
+      <h1>The Pinia App</h1>
       <nav>
         <RouterLink to="/">Counter Options</RouterLink>
         <RouterLink to="/counter2">Counter Setup</RouterLink>
+        <RouterLink to="/clients">Clients</RouterLink>
       </nav>
     </div>
   </header>
