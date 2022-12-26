@@ -6,6 +6,9 @@ import type { Client } from '@/clients/interfaces/client';
 import { useClientsStore } from '@/store/clients';
 
 const getClients = async( page: number ): Promise<Client[]> => {
+  await new Promise( resolve => {
+    setTimeout( () => resolve( true ), 1500 )
+  });
   const { data } = await clientsApi.get<Client[]>(`?_page=${ page }`);
   return data;
 }
@@ -17,7 +20,10 @@ const useClients = () => {
 
   const { isLoading, data } = useQuery(
     ['clients?page=', currentPage],
-    () => getClients( currentPage.value )
+    () => getClients( currentPage.value ),
+    {
+      // staleTime: 1000 * 60, // 1 minute
+    }
   );
 
   watch( data, clients => {
