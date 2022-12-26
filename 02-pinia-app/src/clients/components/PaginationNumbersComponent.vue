@@ -1,14 +1,28 @@
 <script setup lang="ts">
+import useClients from '@/clients/composables/useClients';
+
+const { currentPage, getPage, totalPageNumbers, totalPages } = useClients();
 
 </script>
 
 <template>
   <div>
-    <button>Previous</button>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>Next</button>
+    <button
+      :disabled="currentPage === 1"
+      @click="getPage(currentPage - 1)"
+    >Previous</button>
+    <button
+      v-for="number of totalPageNumbers"
+      :key="number"
+      :class="{ active: currentPage === number }"
+      @click="getPage(number)"
+    >
+      {{ number }}
+    </button>
+    <button
+      :disabled="currentPage === totalPages"
+      @click="getPage(currentPage + 1)"
+    >Next</button>
   </div>
 </template>
 
@@ -29,7 +43,7 @@ button {
 }
 
 button:hover {
-  background-color: hsla(160, 100%, 37, 0.2);
+  background-color: hsla(160, 100%, 37%, 0.2);
   transition: all .5s;
 }
 
@@ -38,6 +52,6 @@ button:disabled {
 }
 
 .active {
-  background-color: hsla(160, 100%, 37, 0.2);
+  background-color: hsla(160, 100%, 37%, 0.2);
 }
 </style>

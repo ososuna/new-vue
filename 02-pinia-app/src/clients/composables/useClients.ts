@@ -1,4 +1,4 @@
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useQuery } from '@tanstack/vue-query';
 import clientsApi from '@/api/clientsApi';
@@ -29,7 +29,15 @@ const useClients = () => {
     clients,
     currentPage,
     isLoading,
-    totalPages
+    totalPages,
+    // Methods
+    getPage( page: number ) {
+      store.setPage( page );
+    },
+    // Getter
+    totalPageNumbers: computed(
+      () => [...new Array(totalPages.value)].map((_, i) => i + 1)
+    )
   }
 
 }
