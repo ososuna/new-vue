@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMutation } from '@tanstack/vue-query';
 import clientsApi from '@/api/clientsApi';
@@ -11,17 +12,26 @@ const route = useRoute();
 const { client, isLoading } = useClient( +route.params.id );
 
 const updateClient = async( client: Client ):Promise<Client> => {
+  await new Promise( resolve => {
+    setTimeout( () => resolve( true ), 1500 )
+  });
   const { data } = await clientsApi.patch<Client>(`/${client.id}`, client);
   return data;
 }
 
 const clientMutation = useMutation( updateClient );
 
+watch(clientMutation.isSuccess, () => {
+  setTimeout(() => {
+    clientMutation.reset();
+  }, 2000);
+});
+
 </script>
 
 <template>
-<h3>Saving...</h3>
-<h3>Saved</h3>
+<h3 v-if="clientMutation.isLoading.value">Saving...</h3>
+<h3 v-if="clientMutation.isSuccess.value">Saved</h3>
 <LoadingModalComponent v-if="isLoading" />
 <div v-if="client">
   <h2>{{ client.name }}</h2>
@@ -38,7 +48,12 @@ const clientMutation = useMutation( updateClient );
       v-model="client.address"
     >
     <br>
-    <button type="submit">Save</button>
+    <button
+      type="submit"
+      :disabled="clientMutation.isLoading.value"
+    >
+      Save
+    </button>
   </form>
 </div>
 <code>
