@@ -1,28 +1,21 @@
 <script setup lang="ts">
 import { watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import clientsApi from '@/api/clientsApi';
+import { useRoute, useRouter } from 'vue-router';
 import LoadingModalComponent from '@/shared/components/LoadingModalComponent.vue';
 import useClient from '@/clients/composables/useClient';
-import type { Client } from '@/clients/interfaces/client';
 
 const route = useRoute();
-const queryClient = useQueryClient();
+const router = useRouter();
 
-const { client, isLoading } = useClient( +route.params.id );
-
-const updateClient = async( client: Client ):Promise<Client> => {
-  // await new Promise( resolve => {
-  //   setTimeout( () => resolve( true ), 1500 )
-  // });
-  const { data } = await clientsApi.patch<Client>(`/${client.id}`, client);
-  const queries = queryClient.getQueryCache().findAll(['clients?page='], { exact: false });
-  queries.forEach( query => query.fetch() );
-  return data;
-}
-
-const clientMutation = useMutation( updateClient );
+const {
+  clientMutation,
+  client,
+  isError,
+  isLoading,
+  isUpdating,
+  isUpdatingSuccess,
+  updateClient
+} = useClient( +route.params.id );
 
 watch(clientMutation.isSuccess, () => {
   setTimeout(() => {
@@ -30,15 +23,19 @@ watch(clientMutation.isSuccess, () => {
   }, 2000);
 });
 
+watch(isError, () => {
+  if ( isError.value ) router.replace('/clients');  
+});
+
 </script>
 
 <template>
-<h3 v-if="clientMutation.isLoading.value">Saving...</h3>
-<h3 v-if="clientMutation.isSuccess.value">Saved</h3>
+<h3 v-if="isUpdating">Saving...</h3>
+<h3 v-if="isUpdatingSuccess">Saved</h3>
 <LoadingModalComponent v-if="isLoading" />
 <div v-if="client">
   <h2>{{ client.name }}</h2>
-  <form @submit.prevent="clientMutation.mutate(client!)">
+  <form @submit.prevent="updateClient(client!)">
     <input
       type="text"
       placeholder="Name"
@@ -53,7 +50,7 @@ watch(clientMutation.isSuccess, () => {
     <br>
     <button
       type="submit"
-      :disabled="clientMutation.isLoading.value"
+      :disabled="isUpdating"
     >
       Save
     </button>
